@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Santhyaa's Playlist 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink:#ff85a1; --pink-light:#ffc2d1; --pink-pale:#fff0f3;
+    --lavender:#c9b8ff; --lavender-light:#ede9ff;
+    --mint:#b5ead7; --yellow:#ffd166;
+    --text-dark:#3d2c4e; --text-mid:#7c5c8a; --text-light:#b89ec4;
+    --bg:#fff8fb; --card:#ffffff; --active:#fff0f5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden;}
+
+  .hearts-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+  .heart-float{position:absolute;opacity:0.07;animation:floatUp linear infinite;}
+  @keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:0.1;}90%{opacity:0.06;}100%{transform:translateY(-100px) rotate(360deg);opacity:0;}}
+
+  .app{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr;max-width:1120px;margin:0 auto;padding:20px;gap:20px;}
+
+  header{grid-column:1/-1;text-align:center;padding:24px 20px 10px;position:relative;}
+  .header-tag{display:inline-block;background:var(--pink-light);color:var(--pink);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:10px;}
+  header h1{font-family:'Pacifico',cursive;font-size:clamp(26px,5vw,44px);color:var(--text-dark);line-height:1.2;}
+  header h1 span{color:var(--pink);}
+  .header-sub{color:var(--text-mid);font-size:14px;margin-top:20px;font-weight:500;}
+  .header-decor{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+  .dot{width:6px;height:6px;border-radius:50%;}
+  .dot-p{background:var(--pink);}.dot-l{background:var(--lavender);}.dot-m{background:var(--mint);}.dot-y{background:var(--yellow);}
+
+  .anniv-hint{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:white;border:2px dashed var(--pink-light);border-radius:30px;padding:7px 18px;cursor:pointer;transition:all .2s;}
+  .anniv-hint:hover{border-color:var(--pink);background:var(--pink-pale);}
+  .anniv-hint span{font-size:13px;font-weight:700;color:var(--text-mid);}
+
+  .sidebar{background:var(--card);border-radius:24px;border:2px solid var(--pink-light);padding:20px;display:flex;flex-direction:column;gap:14px;position:sticky;top:20px;height:fit-content;}
+  .np-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--text-light);}
+  .album-art{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(135deg,var(--pink-light),var(--lavender-light),var(--mint));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .disc{width:90px;height:90px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 4px 20px rgba(255,133,161,0.35);}
+  .disc.spinning{animation:spin 4s linear infinite;}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  .song-info{text-align:center;}
+  .song-info .sname{font-size:15px;font-weight:800;color:var(--text-dark);line-height:1.3;}
+  .song-info .smood{font-size:12px;color:var(--text-mid);margin-top:3px;font-weight:500;}
+  .prog-wrap{display:flex;flex-direction:column;gap:5px;}
+  .prog-bar{width:100%;height:5px;background:var(--pink-light);border-radius:10px;cursor:pointer;}
+  .prog-fill{height:100%;background:linear-gradient(to right,var(--pink),var(--lavender));border-radius:10px;width:0%;transition:width .4s linear;}
+  .prog-times{display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);font-weight:600;}
+  .controls{display:flex;align-items:center;justify-content:center;gap:14px;}
+  .cbtn{background:none;border:none;cursor:pointer;color:var(--text-mid);font-size:20px;transition:all .2s;padding:6px;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;}
+  .cbtn:hover{color:var(--pink);transform:scale(1.15);background:var(--pink-pale);}
+  .cbtn.play{width:52px;height:52px;background:var(--pink);color:white;font-size:22px;border-radius:50%;box-shadow:0 4px 15px rgba(255,133,161,0.5);}
+  .cbtn.play:hover{background:#ff6b8a;transform:scale(1.08);}
+  .like-btn{background:none;border:none;cursor:pointer;font-size:20px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);padding:4px;line-height:1;}
+  .like-btn:hover{transform:scale(1.3);}
+
+  .photos-section{border-top:1.5px dashed var(--pink-light);padding-top:14px;}
+  .photos-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;}
+  .photos-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .photo-frame{aspect-ratio:1;border-radius:14px;overflow:hidden;border:2px solid var(--pink-light);background:var(--pink-pale);position:relative;}
+  .photo-frame img{width:100%;height:100%;object-fit:cover;display:none;}
+  .photo-frame .ph-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+  .photo-frame .ph-icon{font-size:24px;}
+  .photo-frame .ph-txt{font-size:10px;color:var(--text-light);font-weight:700;}
+
+  .main{display:flex;flex-direction:column;gap:16px;}
+  .love-banner{background:linear-gradient(135deg,var(--pink-light),var(--lavender-light));border-radius:18px;padding:16px 20px;display:flex;align-items:center;gap:14px;border:2px solid var(--pink-light);}
+  .love-banner .bi{font-size:28px;flex-shrink:0;}
+  .love-banner p{font-size:13px;font-weight:600;color:var(--text-dark);line-height:1.6;}
+  .love-banner p strong{color:var(--pink);}
+
+  .search-wrap{position:relative;}
+  .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--text-light);}
+  .search-input{width:100%;padding:11px 14px 11px 40px;border:2px solid var(--pink-light);border-radius:30px;background:white;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text-dark);outline:none;transition:border-color .2s;}
+  .search-input:focus{border-color:var(--pink);}
+  .search-input::placeholder{color:var(--text-light);}
+  .pl-header{display:flex;align-items:center;justify-content:space-between;}
+  .pl-title{font-size:17px;font-weight:800;color:var(--text-dark);}
+  .pl-count{font-size:13px;color:var(--text-light);font-weight:600;}
+  .song-list{background:var(--card);border-radius:20px;border:2px solid var(--pink-light);overflow:hidden;}
+  .song-item{display:flex;align-items:center;gap:12px;padding:11px 16px;cursor:pointer;transition:all .2s;border-bottom:1px solid #fff0f5;}
+  .song-item:last-child{border-bottom:none;}
+  .song-item:hover{background:var(--pink-pale);}
+  .song-item.active{background:var(--active);border-left:4px solid var(--pink);padding-left:12px;}
+  .song-num{font-size:13px;font-weight:700;color:var(--text-light);width:22px;text-align:center;flex-shrink:0;}
+  .song-item.active .song-num{display:none;}
+  .anim{display:none;width:22px;flex-shrink:0;align-items:flex-end;gap:2px;height:18px;}
+  .song-item.active .anim{display:flex;}
+  .bar{width:3px;background:var(--pink);border-radius:2px;animation:bounce .8s ease infinite alternate;}
+  .bar:nth-child(1){animation-delay:0s;height:10px;}.bar:nth-child(2){animation-delay:.2s;height:16px;}.bar:nth-child(3){animation-delay:.1s;height:8px;}
+  @keyframes bounce{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
+  .song-item.paused .bar{animation-play-state:paused;}
+  .semoji{font-size:24px;flex-shrink:0;}
+  .sdetails{flex:1;min-width:0;}
+  .stitle{font-size:14px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .song-item.active .stitle{color:var(--pink);}
+  .smood{font-size:11px;color:var(--text-light);font-weight:600;margin-top:2px;}
+  .stag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;flex-shrink:0;}
+  .tag-love{background:#ffe0e8;color:#e05270;}.tag-vibe{background:#e8e0ff;color:#7060cc;}.tag-feel{background:#e0f5ec;color:#2e9e6a;}.tag-fav{background:#fff0d6;color:#cc8800;}
+
+  .modal-overlay{position:fixed;inset:0;background:rgba(61,44,78,0.6);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.show{display:flex;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+  .modal-box{background:white;border-radius:28px;padding:36px 32px;max-width:480px;width:100%;text-align:center;position:relative;border:2px solid var(--pink-light);box-shadow:0 20px 60px rgba(255,133,161,0.3);max-height:90vh;overflow-y:auto;}
+  .modal-close{position:absolute;top:14px;right:18px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);}
+  .modal-close:hover{color:var(--pink);}
+  .modal-icon{font-size:52px;margin-bottom:12px;}
+  .modal-title{font-family:'Pacifico',cursive;font-size:22px;color:var(--text-dark);margin-bottom:6px;}
+  .modal-sub{font-size:13px;color:var(--text-mid);font-weight:600;margin-bottom:20px;line-height:1.5;}
+
+  .date-row{display:flex;gap:8px;justify-content:center;margin-bottom:16px;}
+  .date-part{width:64px;padding:10px 6px;border:2px solid var(--pink-light);border-radius:12px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--text-dark);text-align:center;outline:none;transition:border-color .2s;}
+  .date-part:focus{border-color:var(--pink);}
+  .date-part::placeholder{color:var(--pink-light);font-weight:700;}
+  .date-sep{font-size:20px;color:var(--pink-light);display:flex;align-items:center;font-weight:800;}
+  .unlock-btn{background:var(--pink);color:white;border:none;border-radius:30px;padding:12px 32px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 15px rgba(255,133,161,0.4);}
+  .unlock-btn:hover{background:#ff6b8a;transform:scale(1.04);}
+  .date-error{font-size:12px;color:#e05270;font-weight:700;margin-top:8px;min-height:18px;}
+
+  .letter-view{display:none;text-align:left;}
+  .letter-paper{background:linear-gradient(160deg,#fff9fb,#fdf0ff);border-radius:18px;padding:28px 26px;border:1.5px solid var(--pink-light);position:relative;overflow:hidden;}
+  .letter-paper::before{content:"💌";position:absolute;top:-10px;right:-10px;font-size:80px;opacity:0.07;}
+  .letter-text{font-size:14px;line-height:1.9;color:var(--text-dark);font-weight:600;white-space:pre-line;}
+  .letter-sig{margin-top:18px;text-align:right;font-family:'Pacifico',cursive;font-size:18px;color:var(--pink);}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--text-dark);color:white;padding:10px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:300;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+
+  .confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;z-index:400;pointer-events:none;animation:confettiFall 1.8s ease-in forwards;}
+  @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+
+  @media(max-width:700px){.app{grid-template-columns:1fr;padding:12px;}.sidebar{position:static;}.date-row{gap:5px;}.date-part{width:54px;}}
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="app">
+  <header>
+    <div class="header-tag">🎵 Made with love by Nikhil</div>
+    <h1>Santhyaa's <span>Playlist</span> 🌸</h1>
+    <p class="header-sub">25 songs handpicked just for you ✨</p>
+    <div class="header-decor">
+      <div class="dot dot-p"></div><div class="dot dot-l"></div><div class="dot dot-m"></div><div class="dot dot-y"></div><div class="dot dot-p"></div>
+    </div>
+    <div class="anniv-hint" onclick="openModal()">
+      <span>💌</span>
+      <span>Psst… there's a secret just for you</span>
+      <span>→</span>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="np-label">Now Playing 🎶</div>
+    <div class="album-art">
+      <div class="disc" id="disc">🎵</div>
+    </div>
+    <div class="song-info">
+      <div class="sname" id="npName">Choose a song</div>
+      <div class="smood" id="npMood">Made just for you 💕</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bar" id="progBar" onclick="seekTo(event)">
+        <div class="prog-fill" id="progFill"></div>
+      </div>
+      <div class="prog-times">
+        <span id="curTime">0:00</span>
+        <span id="totTime">0:00</span>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="cbtn" onclick="prevSong()">⏮</button>
+      <button class="cbtn play" id="playBtn" onclick="togglePlay()">▶</button>
+      <button class="cbtn" onclick="nextSong()">⏭</button>
+      <button class="like-btn" id="likeBtn" onclick="toggleLike()">🤍</button>
+    </div>
+
+    <!-- PHOTOS: change src="" to your filename e.g. src="santhyaa1.jpg" -->
+    <div class="photos-section">
+      <div class="photos-label">📸 Our Moments</div>
+      <div class="photos-grid">
+        <div class="photo-frame">
+          <img src="Screenshot (27).png" onerror="this.style.display='none'" onload="this.style.display='block';document.getElementById('ph1').style.display='none'">
+          <div class="ph-overlay" id="ph1"><div class="ph-icon">🌸</div><div class="ph-txt">Her photo 1</div></div>
+        </div>
+        <div class="photo-frame">
+          <img src="Screenshot (28).png" onerror="this.style.display='none'" onload="this.style.display='block';document.getElementById('ph2').style.display='none'">
+          <div class="ph-overlay" id="ph2"><div class="ph-icon">💕</div><div class="ph-txt">Her photo 2</div></div>
+        </div>
+        <div class="photo-frame">
+          <img src="Screenshot (29).png" onerror="this.style.display='none'" onload="this.style.display='block';document.getElementById('ph3').style.display='none'">
+          <div class="ph-overlay" id="ph3"><div class="ph-icon">🫶</div><div class="ph-txt">Our photo 1</div></div>
+        </div>
+        <div class="photo-frame">
+          <img src="Screenshot (30).png" onerror="this.style.display='none'" onload="this.style.display='block';document.getElementById('ph4').style.display='none'">
+          <div class="ph-overlay" id="ph4"><div class="ph-icon">✨</div><div class="ph-txt">Our photo 2</div></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="love-banner">
+      <div class="bi">💌</div>
+      <p>Hey <strong>LOVE</strong>! I just made this playlist of all your favourite songs just for you. Hit play and feel the love 🌸</p>
+    </div>
+
+    <!-- COMING SOON — replace when she's back -->
+<div style="background:white;border-radius:20px;border:2px dashed var(--pink-light);padding:40px 20px;text-align:center;">
+  <div style="font-size:48px;margin-bottom:12px;">✈️</div>
+  <div style="font-family:'Pacifico',cursive;font-size:20px;color:var(--text-dark);margin-bottom:8px;">Our Gallery</div>
+  <div style="font-size:13px;font-weight:700;color:var(--text-light);line-height:1.8;">
+    Something beautiful is coming soon 🌸<br>
+    When you're back, this will be filled with<br>
+    all our favourite memories together 💕
+  </div>
+  <div style="margin-top:16px;display:inline-block;background:var(--pink-pale);border:2px solid var(--pink-light);border-radius:30px;padding:7px 20px;font-size:12px;font-weight:800;color:var(--pink);letter-spacing:1px;">
+    🛫 COMING SOON
+  </div>
+</div>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="Search your favourite songs..." id="searchInput" oninput="filterSongs()">
+    </div>
+    <div class="pl-header">
+      <div class="pl-title">🎶 All Songs</div>
+      <div class="pl-count" id="songCount">25 songs</div>
+    </div>
+    <div class="song-list" id="songList"></div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div id="unlockStep">
+      <div class="modal-icon">🔐</div>
+      <div class="modal-title">Secret Message</div>
+      <div class="modal-sub">Enter a special date to unlock<br>something Nikhil wrote just for you 💕</div>
+      <div class="date-row">
+        <input class="date-part" id="dd" maxlength="2" placeholder="DD" oninput="autoTab(this,'mm',2)">
+        <span class="date-sep">/</span>
+        <input class="date-part" id="mm" maxlength="2" placeholder="MM" oninput="autoTab(this,'yyyy',2)">
+        <span class="date-sep">/</span>
+        <input class="date-part" style="width:80px;" id="yyyy" maxlength="4" placeholder="YYYY" oninput="autoTab(this,null,4)">
+      </div>
+      <button class="unlock-btn" onclick="checkDate()">Unlock 💌</button>
+      <div class="date-error" id="dateError"></div>
+    </div>
+
+    <div class="letter-view" id="letterStep">
+      <div class="modal-icon">💌</div>
+      <div class="modal-title">From Nikhil, with love</div>
+      <div style="height:10px;"></div>
+      <div class="letter-paper">
+        <!-- EDIT LETTER TEXT HERE -->
+        <div class="letter-text">Hey hi,
+
+This means everything to me — and so do you.
+
+I have loved you with everything I have, and I know I've hurt you too. I don't want to just say sorry and move on like nothing happened. You deserve more than that, and I mean every word I say.
+
+This distance hurts me more than I can explain. I find myself just craving your presence — a warm hug, a kiss — just you, close to me. That's all I need.
+
+And honestly? I'm still amazed by us. After everything we've been through — all the long, hard days and the distance and the fights — we still chose each other. Every single time. That's not something ordinary. That's something rare and beautiful.
+
+So let's stop overthinking and just live — happily, fully, together. Let's enjoy every moment of this journey, wherever it takes us.
+
+I'm so grateful to be yours. I love you so so much, Santhyaa. 💕</div>
+        <div class="letter-sig">— Nikhil 🌸</div>
+      </div>
+      <div style="text-align:center;margin-top:20px;">
+        <button onclick="closeModal()" style="background:var(--pink);color:white;border:none;border-radius:30px;padding:12px 32px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 15px rgba(255,133,161,0.4);transition:all .2s;" onmouseover="this.style.background='#ff6b8a'" onmouseout="this.style.background='var(--pink)'">
+          Close & go back 🌸
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<audio id="audioPlayer" preload="none"></audio>
+<div class="toast" id="toast"></div>
+
+<script>
+/* SONGS — change src:"filename.mp3" to your exact MP3 filename */
+const songs = [
+  { title:"Neeyum Nanum",         mood:"Naanum Rowdy Dhaan • Anirudh Ravichander",                          tag:"love", emoji:"🌹", src:"Neeyum-Naanum.mp3"                          },
+  { title:"Vaaya Veera",          mood:"Kanchana 2 • Lawrence",                                             tag:"vibe", emoji:"🎸", src:"Vaaya-En-Veera.mp3"                          },
+  { title:"Neelothi",             mood:"Sirai • Justin Prabhakaran",                                        tag:"feel", emoji:"🌊", src:"Neelothi.mp3"                                },
+  { title:"Sidu Sidu",            mood:"Romeo • Vijay Antony",                                              tag:"vibe", emoji:"✨", src:"Sidu Sidu.mp3"                               },
+  { title:"Nesamaguren",          mood:"Parambarai • Stephen Zechariah ft Saindhavi",                       tag:"love", emoji:"🌸", src:"Nesamaguren-MassTamilan.fm.mp3"              },
+  { title:"Un Vizhilgalil",       mood:"Darling • G.V. Prakash",                                           tag:"fav",  emoji:"💫", src:"Un-Vizhigalil.mp3"                           },
+  { title:"Nee Paartha Vizhigal", mood:"3 (Moonu) • Anirudh",                                              tag:"feel", emoji:"🥹", src:"Nee Paartha Vizhigal (The Touch of Love).mp3"},
+  { title:"Enna Solla",           mood:"Thangamagan • Anirudh Ravichander",                                 tag:"love", emoji:"💕", src:"Enna Solla (The New Life of Tamizh).mp3"    },
+  { title:"Oh Oh",                mood:"Thangamagan • Anirudh Ravichander",                                 tag:"vibe", emoji:"🎉", src:"Oh Oh (The First Love of Tamizh).mp3"       },
+  { title:"Yaayum",               mood:"Sagaa • Shabir Sulthan",                                            tag:"feel", emoji:"🌙", src:"Yaayum-MassTamilan.com.mp3"                  },
+  { title:"Nenjukulle Ne",        mood:"Vadacurry • Vivek - Mervin",                                        tag:"love", emoji:"💗", src:"Nenjukulla-Nee.mp3"                          },
+  { title:"Thoovanam",            mood:"Romeo Juliet • D. Imman",                                          tag:"feel", emoji:"🌧", src:"Thoovaanam.mp3"                              },
+  { title:"Adiyae Azhagae",       mood:"Oru Naal Koothu • Justin Prabhakaran",                              tag:"fav",  emoji:"🌺", src:"Adiyae-Azhagae.mp3"                         },
+  { title:"Aathi",                mood:"Kaththi • Anirudh Ravichander",                                     tag:"vibe", emoji:"🔥", src:"Aathi.mp3"                                   },
+  { title:"Kaalangal Thaandi",    mood:"Sita Ramam • Vishal Chandrashekhar",                                tag:"feel", emoji:"⏳", src:"Kaalangal-Thaandi-MassTamilan.dev.mp3"      },
+  { title:"Velicha Poove",        mood:"Ethir Neechal • Anirudh",                                          tag:"love", emoji:"🌼", src:"Velicha-Poove.mp3"                           },
+  { title:"Kulirutha Pula",       mood:"Oththa Seruppu Size 7 • Santhosh Narayanan",                        tag:"vibe", emoji:"🌿", src:"Kulirudha-Pulla-MassTamilan.org.mp3"         },
+  { title:"Oru Paarvaiyil",       mood:"Siva Manasula Sakthi • Yuvan Shankar Raja",                        tag:"love", emoji:"👁",  src:"Oru Paarvaiyil.mp3"                         },
+  { title:"Un Mela Asa Thaan",    mood:"Aayirathil Oruvan • G.V. Prakash",                                 tag:"fav",  emoji:"🫶", src:"Un-Mela-Aasadhaan.mp3"                      },
+  { title:"Senjitaley",           mood:"Remo • Anirudh Ravichander",                                        tag:"vibe", emoji:"🎊", src:"Senjitaley.mp3"                              },
+  { title:"Sirikadhey",           mood:"Remo • Anirudh Ravichander",                                        tag:"love", emoji:"😊", src:"Sirikkadhey.mp3"                             },
+  { title:"Vinmeen",              mood:"Thegidi • Abhay Jodhpurkar, Saindhavi",                             tag:"feel", emoji:"⭐", src:"Vinmeen-Vithaiyil.mp3"                       },
+  { title:"Vaarayo Vaarayo",      mood:"Aadhavan • Harris Jayaraj",                                         tag:"love", emoji:"🤝", src:"Vaarayo-Vaarayo-MassTamilan.dev.mp3"         },
+  { title:"Asa Orave",            mood:"Lubber Pandhu • Sean Roldan",                                       tag:"feel", emoji:"🌤", src:"Aasa Orave.mp3"                              },
+  { title:"Kannamma",             mood:"Ispade Rajavum Idhaya Raniyum • V J Kevin",                         tag:"fav",  emoji:"🫀", src:"Kannamma-MassTamilan.org (1).mp3"            },
+];
+
+const tagLabels  = {love:"💕 Love",vibe:"🎵 Vibe",feel:"🌙 Feel",fav:"⭐ Fav"};
+const tagClasses = {love:"tag-love",vibe:"tag-vibe",feel:"tag-feel",fav:"tag-fav"};
+const audio = document.getElementById("audioPlayer");
+let currentIdx=-1, isPlaying=false, liked={}, filteredIndices=songs.map((_,i)=>i);
+
+function selectSong(idx) {
+  currentIdx=idx;
+  const s=songs[idx];
+  if(!s.src){showToast("⚠️ Add the MP3 file for this song first!");return;}
+  audio.src=s.src;
+  audio.play().then(()=>{isPlaying=true;updateUI();}).catch(()=>showToast("⚠️ File not found: "+s.src));
+  buildList();
+}
+function togglePlay(){
+  if(currentIdx<0){selectSong(0);return;}
+  if(isPlaying){audio.pause();isPlaying=false;}else{audio.play();isPlaying=true;}
+  updateUI();
+}
+function prevSong(){const p=filteredIndices.indexOf(currentIdx);selectSong(filteredIndices[(p-1+filteredIndices.length)%filteredIndices.length]);}
+function nextSong(){const p=filteredIndices.indexOf(currentIdx);selectSong(filteredIndices[(p+1)%filteredIndices.length]);}
+function seekTo(e){if(currentIdx<0||!audio.duration)return;const r=document.getElementById("progBar").getBoundingClientRect();audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;}
+function fmt(s){return isNaN(s)?"0:00":Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");}
+audio.addEventListener("timeupdate",()=>{if(!audio.duration)return;const p=(audio.currentTime/audio.duration)*100;document.getElementById("progFill").style.width=p+"%";document.getElementById("curTime").textContent=fmt(audio.currentTime);document.getElementById("totTime").textContent=fmt(audio.duration);});
+audio.addEventListener("ended",nextSong);
+function updateUI(){
+  const s=currentIdx>=0?songs[currentIdx]:null;
+  document.getElementById("npName").textContent=s?s.title:"Choose a song";
+  document.getElementById("npMood").textContent=s?s.mood:"Made just for you 💕";
+  document.getElementById("disc").textContent=s?s.emoji:"🎵";
+  document.getElementById("playBtn").textContent=isPlaying?"⏸":"▶";
+  document.getElementById("likeBtn").textContent=liked[currentIdx]?"❤️":"🤍";
+  if(isPlaying)document.getElementById("disc").classList.add("spinning");
+  else document.getElementById("disc").classList.remove("spinning");
+  buildList();
+}
+function toggleLike(){if(currentIdx<0)return;liked[currentIdx]=!liked[currentIdx];showToast(liked[currentIdx]?"❤️ Added to favourites!":"Removed from favourites");updateUI();}
+function quickLike(idx){liked[idx]=!liked[idx];showToast(liked[idx]?"❤️ Liked!":"Removed");buildList();}
+function filterSongs(){buildList();}
+function buildList(){
+  const q=document.getElementById("searchInput").value.toLowerCase();
+  filteredIndices=songs.map((_,i)=>i).filter(i=>songs[i].title.toLowerCase().includes(q));
+  document.getElementById("songCount").textContent=filteredIndices.length+" songs";
+  document.getElementById("songList").innerHTML=filteredIndices.map((si,pos)=>`
+    <div class="song-item ${si===currentIdx?(isPlaying?'active':'active paused'):''}" onclick="selectSong(${si})">
+      <div class="song-num">${pos+1}</div>
+      <div class="anim"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+      <div class="semoji">${songs[si].emoji}</div>
+      <div class="sdetails"><div class="stitle">${songs[si].title}</div><div class="smood">${songs[si].mood}</div></div>
+      <span class="stag ${tagClasses[songs[si].tag]}">${tagLabels[songs[si].tag]}</span>
+      <span style="font-size:17px;cursor:pointer;margin-left:4px;" onclick="event.stopPropagation();quickLike(${si})">${liked[si]?'❤️':'🤍'}</span>
+    </div>`).join("");
+}
+
+function openModal(){document.getElementById("modalOverlay").classList.add("show");}
+function closeModal(){
+  document.getElementById("modalOverlay").classList.remove("show");
+  document.getElementById("dd").value="";document.getElementById("mm").value="";document.getElementById("yyyy").value="";
+  document.getElementById("dateError").textContent="";
+  document.getElementById("unlockStep").style.display="block";
+  document.getElementById("letterStep").style.display="none";
+}
+function autoTab(el,nextId,len){if(el.value.length>=len&&nextId)document.getElementById(nextId).focus();}
+function checkDate(){
+  const dd=document.getElementById("dd").value.trim().padStart(2,"0");
+  const mm=document.getElementById("mm").value.trim().padStart(2,"0");
+  const yy=document.getElementById("yyyy").value.trim();
+  if(dd==="21"&&mm==="06"&&yy==="2024"){
+    document.getElementById("unlockStep").style.display="none";
+    document.getElementById("letterStep").style.display="block";
+    launchConfetti();
+  } else {
+    document.getElementById("dateError").textContent="That's not the right date 💔 Think harder!";
+    document.getElementById("modalBox").style.animation="shake .4s ease";
+    setTimeout(()=>document.getElementById("modalBox").style.animation="",400);
+  }
+}
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&document.getElementById("modalOverlay").classList.contains("show"))checkDate();});
+
+function launchConfetti(){
+  const colors=["#ff85a1","#c9b8ff","#b5ead7","#ffd166","#ffc2d1"];
+  for(let i=0;i<80;i++){
+    const c=document.createElement("div");c.className="confetti-piece";
+    c.style.cssText=`left:${Math.random()*100}vw;top:0;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-delay:${Math.random()*1}s;animation-duration:${1.5+Math.random()*.8}s;`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3000);
+  }
+}
+
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);}
+
+const hc=["♥","♡","❤","💕","💗","🌸","✿"];
+for(let i=0;i<20;i++){const h=document.createElement("div");h.className="heart-float";h.textContent=hc[Math.floor(Math.random()*hc.length)];h.style.left=Math.random()*100+"vw";h.style.animationDuration=(8+Math.random()*12)+"s";h.style.animationDelay=(Math.random()*10)+"s";h.style.fontSize=(12+Math.random()*18)+"px";document.getElementById("heartsBg").appendChild(h);}
+
+buildList();
+</script>
+</body>
+</html>
